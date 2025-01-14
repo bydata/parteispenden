@@ -125,7 +125,7 @@ cleanup_dataframe <- function(x) {
       spende_ca = stringr::str_detect(spende, "ca. "),
       spende = stringr::str_remove(spende, "\\s(EUR|Euro|\U20AC)") |>
         stringr::str_remove("ca. ") |>
-        stringr::str_remove("\\.") |>
+        stringr::str_remove_all("\\.") |>
         stringr::str_replace(",", ".") |>
         as.numeric(),
       eingang_anzeige_drucksache = stringr::str_extract(eingang_anzeige, "Drs\\.\\s.+"),
