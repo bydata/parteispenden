@@ -4,9 +4,15 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
+## Überblick
+
+Das Paket **parteispenden** bietet Werkzeuge zum Scrapen und Bereinigen von Berichten über Parteispenden an politische Parteien über 35.000 EUR, die gemäß § 25 Abs. 3 Satz 3 Parteiengesetz auf der Website des Deutschen Bundestages veröffentlicht wurden, unter Verwendung von R. Es automatisiert die Extraktion von Berichts-URLs, scraped tabellarische Daten und bereinigt sie für die Analyse.
+
+---
+
 ## Overview
 
-The **parteispenden** package provides tools to scrape, clean, and organize annual party financing reports published on the German Bundestag website. It automates the extraction of report URLs, scrapes tabular data, and cleans it for analysis.
+The **parteispenden** package provides tools to scrape and clean reports about party donations to political parties exceeding 35,000 EUR published on the German Bundestag website using R. It automates the extraction of report URLs, scrapes tabular data, and cleans it for analysis.
 
 ### About the Data
 
