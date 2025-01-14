@@ -3,6 +3,10 @@
 ## Overview
 The **parteispenden** package provides tools to scrape, clean, and organize annual party financing reports published on the German Bundestag website. It automates the extraction of report URLs, scrapes tabular data, and cleans it for analysis.
 
+### About the Data
+
+According to § 25 Abs. 3 Satz 3 Parteiengesetz, donations to political parties exceeding 35,000 EUR must be reported immediately to the President of the German Bundestag. These donations are promptly published as Bundestag printed documents, including the donor's identity. Since March 5, 2024, the reporting and publication obligation arises as soon as the donation exceeds 35,000 EUR.
+
 ## Installation
 ```r
 # Install the package from GitHub 
