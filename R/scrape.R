@@ -185,7 +185,7 @@ pull_reports <- function(years, combine = TRUE) {
 
   if (combine) {
     cleaned_data <- do.call(rbind, cleaned_data)
-    cleaned_data$jahr <- as.numeric(format(cleaned_data$eingang_spende, "%Y"))
+    cleaned_data$jahr <- as.numeric(format(cleaned_data$eingang_anzeige, "%Y"))
     cleaned_data <- cleaned_data[, c("jahr", setdiff(names(cleaned_data), "jahr"))]
   }
   cleaned_data
