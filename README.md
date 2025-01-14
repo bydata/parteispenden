@@ -6,7 +6,7 @@
 
 ## Überblick
 
-Das Paket **parteispenden** bietet Werkzeuge zum Scrapen und Bereinigen von Berichten über Parteispenden an politische Parteien über 35.000 EUR, die gemäß § 25 Abs. 3 Satz 3 Parteiengesetz auf der Website des Deutschen Bundestages veröffentlicht wurden, unter Verwendung von R. Es automatisiert die Extraktion von Berichts-URLs, scraped tabellarische Daten und bereinigt sie für die Analyse.
+Das Package **parteispenden** bietet Werkzeuge zum Scrapen und Bereinigen von Berichten über Parteispenden an politische Parteien über 35.000 EUR, die gemäß § 25 Abs. 3 Satz 3 Parteiengesetz auf der Website des Deutschen Bundestages veröffentlicht wurden, unter Verwendung von R. Es automatisiert die Extraktion von Berichts-URLs, scraped tabellarische Daten und bereinigt sie für die Analyse.
 
 ---
 
