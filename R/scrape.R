@@ -117,6 +117,7 @@ scrape_annual_report <- function(url) {
 #' @export
 cleanup_dataframe <- function(x) {
 
+  x <- x[, 1:5]
   colnames(x) <- c("partei", "spende", "spender", "eingang_spende", "eingang_anzeige")
   x |>
     dplyr::filter(!stringr::str_detect(partei, "\\d{4}")) |>
@@ -133,5 +134,72 @@ cleanup_dataframe <- function(x) {
     )
 }
 
+#' Download and Clean Annual Party Financing Reports
+#'
+#' This function downloads, cleans, and optionally combines annual party
+#' financing reports from the German Bundestag website for specified years.
+#'
+#' @param years A numeric vector of years (from 2009 onwards) indicating which
+#' reports to download and process.
+#' @param combine Logical. If `TRUE` (default), the cleaned data from all years
+#' will be combined into a single data frame. If `FALSE`, a list of data frames
+#' for each year will be returned.
+#'
+#' @return A data frame if `combine = TRUE` or a list of data frames if
+#' `combine = FALSE`. Each data frame contains cleaned and standardized data
+#' from the selected annual reports.
+#'
+#' @details This function performs the following steps:
+#' \itemize{
+#'   \item Retrieves available report URLs using \code{\link{get_annual_report_urls}}.
+#'   \item Filters reports for the specified years (2009 and later).
+#'   \item Scrapes and cleans each report using \code{\link{scrape_annual_report}}
+#'   and \code{\link{cleanup_dataframe}}.
+#'   \item Optionally combines the cleaned data into a single data frame, adding
+#'   a \code{jahr} column that indicates the year of the report.
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' # Download and combine reports from 2018 to 2020
+#' reports <- pull_reports(years = 2018:2020)
+#' head(reports)
+#'
+#' # Download reports for 2015 and 2017 without combining
+#' reports_list <- pull_reports(years = c(2015, 2017), combine = FALSE)
+#' str(reports_list)
+#' }
+#'
+#' @importFrom stats setNames
+#' @export
+pull_reports <- function(years, combine = TRUE) {
+  urls <- get_annual_report_urls()
+  available_years <- extract_year_from_url(urls)
+  names(urls) <- available_years
+  # The data before 2009 is not ready to be scraped from the website
+  available_years <- available_years[available_years >= 2009]
+  urls <- urls[as.character(years[years %in% available_years])]
 
+  data <- lapply(urls, scrape_annual_report)
+  cleaned_data <- lapply(data, cleanup_dataframe)
 
+  if (combine) {
+    cleaned_data <- do.call(rbind, cleaned_data)
+    cleaned_data$jahr <- as.numeric(format(cleaned_data$eingang_spende, "%Y"))
+    cleaned_data <- cleaned_data[, c("jahr", setdiff(names(cleaned_data), "jahr"))]
+  }
+  cleaned_data
+}
+
+#' Extract Year from Bundestag Report URL
+#'
+#' This function extracts the 4-digit year from a Bundestag party financing report URL.
+#'
+#' @param x A character vector of URLs containing the year
+#'
+#' @return A character vector of extracted 4-digit years. If the URL does not
+#' contain a year in the specified format, the result will be an empty string.
+extract_year_from_url <- function(x) {
+  year <- sub(".*fundstellen50000/(\\d{4})/.*", "\\1", x)
+  year
+}
