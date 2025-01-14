@@ -1,7 +1,7 @@
 Package: parteispenden
 Type: Package
 Title: Scrape and Clean Party Financing Reports from the German Bundestag
-Version: 0.1.0.9001
+Version: 0.1.0.9002
 Author: Ansgar Wolsing [aut, cre]
 Maintainer: Ansgar Wolsing <ansgar.wolsing@gmail.com>
 Description: Provides functions to scrape and clean political 
