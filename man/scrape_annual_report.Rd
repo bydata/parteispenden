@@ -12,7 +12,8 @@ webpage to scrape.}
 }
 \value{
 A data frame containing the extracted tabular data from the
-provided URL. If no table is found, it may return `NULL` or an empty data frame.
+provided URL. If no table is found, it may return `NULL` or an empty
+data frame.
 }
 \description{
 This function downloads and extracts tabular data from a specified

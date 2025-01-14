@@ -26,10 +26,11 @@ financing reports from the German Bundestag website for specified years.
 \details{
 This function performs the following steps:
 \itemize{
-  \item Retrieves available report URLs using \code{\link{get_annual_report_urls}}.
+  \item Retrieves available report URLs using
+  \code{\link{get_annual_report_urls}}.
   \item Filters reports for the specified years (2009 and later).
-  \item Scrapes and cleans each report using \code{\link{scrape_annual_report}}
-  and \code{\link{cleanup_dataframe}}.
+  \item Scrapes and cleans each report using
+  \code{\link{scrape_annual_report}} and \code{\link{cleanup_dataframe}}.
   \item Optionally combines the cleaned data into a single data frame, adding
   a \code{jahr} column that indicates the year of the report.
 }

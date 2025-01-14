@@ -22,8 +22,10 @@ This function performs several data cleaning steps:
 \itemize{
   \item Renames the columns to standardized names: `"partei"`, `"spende"`,
   `"spender"`, `"eingang_spende"`, and `"eingang_anzeige"`.
-  \item Filters out rows where the `"partei"` column contains year-like patterns.
-  \item Detects approximate donation values with the `"ca. "` prefix and flags them.
+  \item Filters out rows where the `"partei"` column contains year-like
+  patterns.
+  \item Detects approximate donation values with the `"ca. "` prefix and
+  flags them.
   \item Cleans the `"spende"` column by removing currency symbols,
   correcting decimal formatting, and converting values to numeric.
   \item Extracts document references from the `"eingang_anzeige"` column.

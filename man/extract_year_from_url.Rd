@@ -14,5 +14,6 @@ A character vector of extracted 4-digit years. If the URL does not
 contain a year in the specified format, the result will be an empty string.
 }
 \description{
-This function extracts the 4-digit year from a Bundestag party financing report URL.
+This function extracts the 4-digit year from a Bundestag party financing
+report URL.
 }

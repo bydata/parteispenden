@@ -1,4 +1,5 @@
-utils::globalVariables(c("partei", "spende", "eingang_anzeige", "eingang_spende"))
+utils::globalVariables(c("partei", "spende", "eingang_anzeige",
+                         "eingang_spende"))
 
 #' Retrieve Annual Report URLs for Party Financing
 #'
@@ -41,7 +42,8 @@ get_annual_report_urls <- function() {
 #' webpage to scrape.
 #'
 #' @return A data frame containing the extracted tabular data from the
-#' provided URL. If no table is found, it may return `NULL` or an empty data frame.
+#' provided URL. If no table is found, it may return `NULL` or an empty
+#' data frame.
 #'
 #' @details This function uses the `rvest` package to parse HTML content
 #' and extract the first HTML table found on the report page.
@@ -90,8 +92,10 @@ scrape_annual_report <- function(url) {
 #' \itemize{
 #'   \item Renames the columns to standardized names: `"partei"`, `"spende"`,
 #'   `"spender"`, `"eingang_spende"`, and `"eingang_anzeige"`.
-#'   \item Filters out rows where the `"partei"` column contains year-like patterns.
-#'   \item Detects approximate donation values with the `"ca. "` prefix and flags them.
+#'   \item Filters out rows where the `"partei"` column contains year-like
+#'   patterns.
+#'   \item Detects approximate donation values with the `"ca. "` prefix and
+#'   flags them.
 #'   \item Cleans the `"spende"` column by removing currency symbols,
 #'   correcting decimal formatting, and converting values to numeric.
 #'   \item Extracts document references from the `"eingang_anzeige"` column.
@@ -118,7 +122,8 @@ scrape_annual_report <- function(url) {
 cleanup_dataframe <- function(x) {
 
   x <- x[, 1:5]
-  colnames(x) <- c("partei", "spende", "spender", "eingang_spende", "eingang_anzeige")
+  colnames(x) <- c("partei", "spende", "spender", "eingang_spende",
+                   "eingang_anzeige")
   x |>
     dplyr::filter(!stringr::str_detect(partei, "\\d{4}")) |>
     dplyr::mutate(
@@ -128,9 +133,11 @@ cleanup_dataframe <- function(x) {
         stringr::str_remove_all("\\.") |>
         stringr::str_replace(",", ".") |>
         as.numeric(),
-      eingang_anzeige_drucksache = stringr::str_extract(eingang_anzeige, "Drs\\.\\s.+"),
+      eingang_anzeige_drucksache = stringr::str_extract(
+        eingang_anzeige, "Drs\\.\\s.+"),
       eingang_anzeige = stringr::str_remove(eingang_anzeige, "Drs\\.\\s.+"),
-      dplyr::across(c(eingang_spende, eingang_anzeige), function(x) as.Date(x, format = "%d.%m.%Y"))
+      dplyr::across(c(eingang_spende, eingang_anzeige),
+                    function(x) as.Date(x, format = "%d.%m.%Y"))
     )
 }
 
@@ -151,10 +158,11 @@ cleanup_dataframe <- function(x) {
 #'
 #' @details This function performs the following steps:
 #' \itemize{
-#'   \item Retrieves available report URLs using \code{\link{get_annual_report_urls}}.
+#'   \item Retrieves available report URLs using
+#'   \code{\link{get_annual_report_urls}}.
 #'   \item Filters reports for the specified years (2009 and later).
-#'   \item Scrapes and cleans each report using \code{\link{scrape_annual_report}}
-#'   and \code{\link{cleanup_dataframe}}.
+#'   \item Scrapes and cleans each report using
+#'   \code{\link{scrape_annual_report}} and \code{\link{cleanup_dataframe}}.
 #'   \item Optionally combines the cleaned data into a single data frame, adding
 #'   a \code{jahr} column that indicates the year of the report.
 #' }
@@ -186,14 +194,16 @@ pull_reports <- function(years, combine = TRUE) {
   if (combine) {
     cleaned_data <- do.call(rbind, cleaned_data)
     cleaned_data$jahr <- as.numeric(format(cleaned_data$eingang_anzeige, "%Y"))
-    cleaned_data <- cleaned_data[, c("jahr", setdiff(names(cleaned_data), "jahr"))]
+    cleaned_data <- cleaned_data[, c("jahr",
+                                     setdiff(names(cleaned_data), "jahr"))]
   }
   cleaned_data
 }
 
 #' Extract Year from Bundestag Report URL
 #'
-#' This function extracts the 4-digit year from a Bundestag party financing report URL.
+#' This function extracts the 4-digit year from a Bundestag party financing
+#' report URL.
 #'
 #' @param x A character vector of URLs containing the year
 #'
