@@ -29,7 +29,7 @@ get_annual_report_urls <- function() {
     rvest::html_nodes(css = "li  a") |>
     rvest::html_attr("href")
   sapply(
-    urls,
+    report_urls,
     function(x) ifelse(grepl(base_url, x, fixed = TRUE), x, paste0(base_url, x)),
     USE.NAMES = FALSE)
   report_urls
