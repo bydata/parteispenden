@@ -23,16 +23,15 @@ utils::globalVariables(c("partei", "spende", "eingang_anzeige",
 #' @export
 get_annual_report_urls <- function() {
   base_url <- "https://www.bundestag.de"
-  start_url <- "https://www.bundestag.de/ajax/filterlist/de/parlament/praesidium/parteienfinanzierung/fundstellen50000/462002-462002?limit=0&noFilterSet=true&offset=0"
+  start_url <- "https://www.bundestag.de/parlament/praesidium/parteienfinanzierung/fundstellen50000"
   start_page <- rvest::read_html(start_url)
   report_urls <- start_page |>
-    rvest::html_nodes(css = "li  a") |>
+    rvest::html_nodes(css = "li a.e-linkListItem__anchor") |>
     rvest::html_attr("href")
   sapply(
     report_urls,
     function(x) ifelse(grepl(base_url, x, fixed = TRUE), x, paste0(base_url, x)),
     USE.NAMES = FALSE)
-  report_urls
 }
 
 
@@ -128,7 +127,7 @@ cleanup_dataframe <- function(x) {
   colnames(x) <- c("partei", "spende", "spender", "eingang_spende",
                    "eingang_anzeige")
   x |>
-    dplyr::filter(!stringr::str_detect(partei, "\\d{4}")) |>
+    dplyr::filter(!stringr::str_detect(partei, "\\d{4}"), partei != spende) |>
     dplyr::mutate(
       spende_ca = stringr::str_detect(spende, "ca. "),
       spende = stringr::str_remove(spende, "\\s(EUR|Euro|\U20AC)") |>
@@ -187,16 +186,16 @@ pull_reports <- function(years, combine = TRUE) {
   urls <- get_annual_report_urls()
   available_years <- extract_year_from_url(urls)
   names(urls) <- available_years
+
   # The data before 2009 is not ready to be scraped from the website
   available_years <- available_years[available_years >= 2009]
   urls <- urls[as.character(years[years %in% available_years])]
-
   data <- lapply(urls, scrape_annual_report)
   cleaned_data <- lapply(data, cleanup_dataframe)
 
   if (combine) {
     cleaned_data <- do.call(rbind, cleaned_data)
-    cleaned_data$jahr <- as.numeric(format(cleaned_data$eingang_anzeige, "%Y"))
+    cleaned_data$jahr <- as.integer(format(cleaned_data$eingang_anzeige, "%Y"))
     cleaned_data <- cleaned_data[, c("jahr",
                                      setdiff(names(cleaned_data), "jahr"))]
   }
@@ -213,6 +212,6 @@ pull_reports <- function(years, combine = TRUE) {
 #' @return A character vector of extracted 4-digit years. If the URL does not
 #' contain a year in the specified format, the result will be an empty string.
 extract_year_from_url <- function(x) {
-  year <- sub(".*fundstellen50000/(\\d{4})/.*", "\\1", x)
+  year <- sub(".*fundstellen50000/(\\d{4})(?:$|/.*)", "\\1", x)
   year
 }
